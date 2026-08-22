@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    participant Broker as RabbitMQ
+    participant Worker as Celery Worker
+    participant Redis as Redis Lock
+    participant DB as PostgreSQL
+
+    Broker->>Worker: Consome 'nfe.received'
+    Worker->>Redis: Adquire Lock Distribuído (lock:nfe:{hash})
+    alt Lock Adquirido com Sucesso
+        Worker->>DB: Verifica duplicidade da Hash SHA-256
+        alt Nota Já Existe como APPROVED
+            Worker->>DB: Atualiza status -> FRAUD_SUSPECT
+        else Nota Nova
+            Worker->>Worker: Executa NCM Parser e Consulta SEFAZ
+            Worker->>DB: Grava Invoice APPROVED e emite RecyclingCredit
+        end
+        Worker->>Redis: Libera Lock
+        Worker->>Broker: ACK
+    else Lock Falhou
+        Worker->>Broker: Reenfileira / NACK
+    end
