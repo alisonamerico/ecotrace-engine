@@ -1,4 +1,4 @@
-from app.core.config import Settings, get_settings
+from app.core.config import Settings, config, get_settings
 
 
 def test_default_settings() -> None:
@@ -75,3 +75,8 @@ def test_get_settings_singleton() -> None:
     s1 = get_settings()
     s2 = get_settings()
     assert s1 is s2
+
+
+def test_decouple_config_export() -> None:
+    app_name = config("APP_NAME", default="EcoTrace Engine")
+    assert app_name == "EcoTrace Engine"

@@ -1,8 +1,11 @@
 from functools import lru_cache
 from typing import Literal
 
+from decouple import config as decouple_config
 from pydantic import computed_field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+config = decouple_config
 
 
 class Settings(BaseSettings):
