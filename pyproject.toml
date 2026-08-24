@@ -35,6 +35,7 @@ dev = [
     "ruff>=0.9.0",
     "mypy>=1.14.0",
     "pre-commit>=4.0.0",
+    "testcontainers[postgres]>=4.8.0",
 ]
 
 [build-system]
@@ -51,6 +52,9 @@ python_files = ["test_*.py"]
 python_functions = ["test_*"]
 asyncio_mode = "auto"
 addopts = "-v --tb=short --cov=app --cov-report=term-missing"
+markers = [
+    "integration: tests that require external infrastructure (Docker) via testcontainers",
+]
 
 [tool.coverage.run]
 branch = true
