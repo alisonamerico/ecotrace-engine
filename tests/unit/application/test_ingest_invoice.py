@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 
 import pytest
@@ -62,14 +63,12 @@ async def test_execute_persists_pending_invoice_and_publishes_event() -> None:
     assert len(invoice.items) == 1
 
     assert len(broker.published) == 1
-    exchange, routing_key, payload = broker.published[0]
+    exchange, routing_key, _payload = broker.published[0]
     assert exchange == NFE_EXCHANGE
     assert routing_key == NFE_RECEIVED_ROUTING_KEY
 
 
 async def test_published_event_carries_identifiers() -> None:
-    import json
-
     repository = FakeInvoiceRepository()
     broker = RecordingBroker()
     use_case = IngestInvoice(repository=repository, broker=broker)
