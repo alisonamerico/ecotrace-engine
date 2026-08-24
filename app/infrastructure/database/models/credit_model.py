@@ -3,7 +3,7 @@ from datetime import UTC, datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, Index, Numeric, String
+from sqlalchemy import DateTime, ForeignKey, Index, Numeric, String, text
 from sqlalchemy import Enum as SAEnum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -21,7 +21,10 @@ class CreditModel(Base):
     __tablename__ = "recycling_credits"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+        server_default=text("uuid_generate_v4()"),
     )
     invoice_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -42,9 +45,13 @@ class CreditModel(Base):
         ),
         nullable=False,
         default=CreditStatus.AVAILABLE,
+        server_default="AVAILABLE",
     )
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False
+        DateTime(timezone=True),
+        default=lambda: datetime.now(UTC),
+        server_default=text("now()"),
+        nullable=False,
     )
 
     invoice: Mapped["InvoiceModel"] = relationship(back_populates="credits")
