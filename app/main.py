@@ -34,6 +34,7 @@ def create_app() -> FastAPI:
         request: Request, exc: DomainException
     ) -> JSONResponse:
         """Map pure-domain validation failures to HTTP 422 responses."""
+        del request
         return JSONResponse(status_code=422, content={"detail": exc.message})
 
     return application
