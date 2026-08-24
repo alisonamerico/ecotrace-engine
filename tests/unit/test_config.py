@@ -1,3 +1,6 @@
+import pytest
+from pydantic import SecretStr, ValidationError
+
 from app.core.config import Settings, config, get_settings
 
 
@@ -80,3 +83,36 @@ def test_get_settings_singleton() -> None:
 def test_decouple_config_export() -> None:
     app_name = config("APP_NAME", default="EcoTrace Engine")
     assert app_name == "EcoTrace Engine"
+
+
+def test_credentials_are_secretstr_and_not_leaked_in_repr(test_settings: Settings) -> None:
+    assert isinstance(test_settings.POSTGRES_PASSWORD, SecretStr)
+    assert isinstance(test_settings.RABBITMQ_PASSWORD, SecretStr)
+    assert "test_password" not in repr(test_settings)
+    assert "test_rabbit_pass" not in repr(test_settings)
+
+
+def test_deployed_environment_requires_credentials() -> None:
+    with pytest.raises(ValidationError) as exc_info:
+        Settings(
+            ENVIRONMENT="production",
+            POSTGRES_USER="",
+            POSTGRES_PASSWORD="",
+            RABBITMQ_USER="",
+            RABBITMQ_PASSWORD="",
+        )
+    message = str(exc_info.value)
+    assert "Missing required credentials" in message
+    for var in ("POSTGRES_USER", "POSTGRES_PASSWORD", "RABBITMQ_USER", "RABBITMQ_PASSWORD"):
+        assert var in message
+
+
+def test_development_allows_empty_credentials() -> None:
+    settings = Settings(
+        ENVIRONMENT="development",
+        POSTGRES_USER="",
+        POSTGRES_PASSWORD="",
+        RABBITMQ_USER="",
+        RABBITMQ_PASSWORD="",
+    )
+    assert settings.POSTGRES_PASSWORD.get_secret_value() == ""
