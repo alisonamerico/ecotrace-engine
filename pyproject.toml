@@ -2,7 +2,6 @@
 name = "ecotrace-engine"
 version = "0.1.0"
 description = "Distributed asynchronous engine for fiscal validation, SHA-256 anti-fraud auditing, and recycling credit generation."
-readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.115.0",
