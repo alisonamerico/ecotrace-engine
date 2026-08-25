@@ -158,7 +158,7 @@ docker compose -f docker/docker-compose.yml up -d
 uv run alembic -c migrations/alembic.ini upgrade head
 
 # Iniciar API
-uv run uvicorn app.main:app --reload --port 8000
+uv run uvicorn app.main:app --reload --port 8080
 
 # Iniciar worker
 uv run celery -A app.workers.celery_app:celery_app worker -l info -Q ecotrace.invoices
@@ -177,7 +177,7 @@ uv run celery -A app.workers.celery_app:celery_app worker -l info -Q ecotrace.in
 
 ```bash
 # Ingerir NF-e
-curl -X POST http://localhost:8000/api/v1/nfe/ingest \
+curl -X POST http://localhost:8080/api/v1/nfe/ingest \
   -H "Content-Type: application/json" \
   -d '{
     "access_key": "35240112345678000190550010000001230000000042",
@@ -194,7 +194,7 @@ curl -X POST http://localhost:8000/api/v1/nfe/ingest \
   }'
 
 # Consultar status
-curl http://localhost:8000/api/v1/nfe/status/{tracking_id}
+curl http://localhost:8080/api/v1/nfe/status/{tracking_id}
 ```
 
 ## Deploy com Kubernetes

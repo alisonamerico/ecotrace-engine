@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     APP_VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
     HOST: str = "0.0.0.0"
-    PORT: int = 8000
+    PORT: int = 8080
 
     # PostgreSQL Database
     POSTGRES_SERVER: str = "localhost"

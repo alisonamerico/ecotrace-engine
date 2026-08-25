@@ -9,7 +9,7 @@ def test_default_settings() -> None:
     assert settings.APP_NAME == "EcoTrace Engine"
     assert settings.APP_VERSION == "0.1.0"
     assert settings.API_V1_STR == "/api/v1"
-    assert settings.PORT == 8000
+    assert settings.PORT == 8080
     assert settings.LOG_FORMAT == "json"
 
 
