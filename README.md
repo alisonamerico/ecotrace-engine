@@ -1,5 +1,47 @@
 # EcoTrace Engine
 
+<p align="center">
+  <a href="https://www.python.org/">
+    <img src="https://img.shields.io/badge/python-3.13-blue.svg?logo=python&logoColor=white" alt="Python 3.13">
+  </a>
+  <a href="https://fastapi.tiangolo.com/">
+    <img src="https://img.shields.io/badge/FastAPI-0.141-009688.svg?logo=fastapi&logoColor=white" alt="FastAPI 0.141">
+  </a>
+  <a href="https://docs.sqlalchemy.org/20/">
+    <img src="https://img.shields.io/badge/SQLAlchemy-2.0-CC0000.svg?logo=sqlalchemy&logoColor=white" alt="SQLAlchemy 2.0">
+  </a>
+  <a href="https://docs.celeryq.dev/">
+    <img src="https://img.shields.io/badge/Celery-5.6-59B245.svg?logo=celery&logoColor=white" alt="Celery 5.6">
+  </a>
+  <a href="https://docs.astral.sh/uv/">
+    <img src="https://img.shields.io/badge/uv-0.10-261230.svg?logo=python&logoColor=white" alt="uv 0.10">
+  </a>
+  <a href="https://www.docker.com/">
+    <img src="https://img.shields.io/badge/Docker_Compose-2496ED.svg?logo=docker&logoColor=white" alt="Docker Compose">
+  </a>
+  <a href="https://docs.ruff.sh/">
+    <img src="https://img.shields.io/badge/Ruff-linter-FFD43B.svg?logo=ruff&logoColor=black" alt="Ruff">
+  </a>
+  <a href="https://mypy-lang.org/">
+    <img src="https://img.shields.io/badge/MyPy-strict-2A6DB2.svg?logo=mypy&logoColor=white" alt="MyPy strict">
+  </a>
+  <a href="https://www.postgresql.org/">
+    <img src="https://img.shields.io/badge/PostgreSQL-16-4169E1.svg?logo=postgresql&logoColor=white" alt="PostgreSQL 16">
+  </a>
+  <a href="https://redis.io/">
+    <img src="https://img.shields.io/badge/Redis-7-DC382D.svg?logo=redis&logoColor=white" alt="Redis 7">
+  </a>
+  <a href="https://www.rabbitmq.com/">
+    <img src="https://img.shields.io/badge/RabbitMQ-3-FF6600.svg?logo=rabbitmq&logoColor=white" alt="RabbitMQ 3">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License">
+  </a>
+  <a href="https://github.com/alison/americo/ecotrace-engine/actions">
+    <img src="https://img.shields.io/badge/tests-117%20passing-brightgreen.svg" alt="Tests">
+  </a>
+</p>
+
 Motor distribuído de ingestão e conciliação antifraude de Notas Fiscais para o ecossistema Eureciclo.
 
 ## Visão Geral
@@ -35,17 +77,17 @@ O EcoTrace Engine valida NF-e em tempo real, detecta fraude por dupla contagem e
 
 ## Stack Tecnológica
 
-| Camada | Tecnologia |
-|---|---|
-| Runtime | Python 3.13+ |
-| Framework API | FastAPI (Pydantic v2, async) |
-| ORM & DB | SQLAlchemy 2.0 Async + Alembic + PostgreSQL 16 |
-| Mensageria | RabbitMQ 3.x + Celery (broker: RabbitMQ, backend: Redis) |
-| Cache & Lock | Redis 7.x (Redlock pattern) |
-| Observabilidade | Structlog (JSON) + OpenTelemetry + Prometheus + Grafana |
-| Deploy | Docker + Kubernetes |
-| CI/CD | GitHub Actions |
-| Qualidade | Ruff (lint/format), MyPy (strict), Pytest |
+| Camada | Tecnologia | Documentação |
+|---|---|---|
+| Runtime | Python 3.13+ | [docs.python.org/3.13](https://docs.python.org/3.13/) |
+| Framework API | FastAPI (Pydantic v2, async) | [fastapi.tiangolo.com](https://fastapi.tiangolo.com/) |
+| ORM & DB | SQLAlchemy 2.0 Async + Alembic + PostgreSQL 16 | [docs.sqlalchemy.org/20](https://docs.sqlalchemy.org/20/) |
+| Mensageria | RabbitMQ 3.x + Celery (broker: RabbitMQ, backend: Redis) | [docs.celeryq.dev](https://docs.celeryq.dev/) |
+| Cache & Lock | Redis 7.x (Redlock pattern) | [redis.io/docs](https://redis.io/docs/) |
+| Observabilidade | Structlog (JSON) + OpenTelemetry + Prometheus + Grafana | [structlog.readthedocs.io](https://www.structlog.org/en/stable/) |
+| Deploy | Docker + Kubernetes | [kubernetes.io/docs](https://kubernetes.io/docs/home/) |
+| CI/CD | GitHub Actions | [docs.github.com/actions](https://docs.github.com/en/actions) |
+| Qualidade | Ruff (lint/format), MyPy (strict), Pytest | [docs.ruff.sh](https://docs.ruff.sh/) |
 
 ## Estrutura do Projeto
 
@@ -171,6 +213,18 @@ O projeto segue Clean Architecture com Domain-Driven Design:
 - **Infrastructure Layer** (`app/infrastructure/`): Adaptadores concretos (SQLAlchemy, Redis, RabbitMQ)
 - **API Layer** (`app/api/`): FastAPI endpoints, orquestração HTTP
 - **Workers Layer** (`app/workers/`): Celery tasks, pipeline assíncrono
+
+## Documentação Técnica
+
+| Documento | Descrição |
+|---|---|
+| [FASE_00_PRODUCT_DISCOVERY.md](docs/FASE_00_PRODUCT_DISCOVERY.md) | Descoberta do Produto |
+| [FASE_01_PRD.md](docs/FASE_01_PRD.md) | Product Requirements Document (PRD) |
+| [FASE_02_ARQUITETURA.md](docs/FASE_02_ARQUITETURA.md) | Arquitetura do Sistema |
+| [FASE_03_MODELAGEM_DDD.md](docs/FASE_03_MODELAGEM_DDD.md) | Modelagem de Domínio (DDD) |
+| [FASE_04_BANCO_DE_DADOS.md](docs/FASE_04_BANCO_DE_DADOS.md) | Schema do Banco de Dados |
+| [FASE_05_ESTRUTURA_PROJETO.md](docs/FASE_05_ESTRUTURA_PROJETO.md) | Estrutura do Projeto |
+| [FASE_06_PLANEJAMENTO_DESENVOLVIMENTO.md](docs/FASE_06_PLANEJAMENTO_DESENVOLVIMENTO.md) | Planejamento do Desenvolvimento |
 
 ## Licença
 
