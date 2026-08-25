@@ -1,0 +1,69 @@
+# Version control
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[codz]
+*$py.class
+*.egg-info
+*.egg
+dist
+build
+.eggs
+*.whl
+
+# Virtual environments
+.venv
+venv
+env
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache
+.coverage
+.coverage.*
+htmlcov
+coverage.xml
+*.cover
+
+# Type checking
+.mypy_cache
+.dmypy.json
+
+# Linting
+.ruff_cache
+
+# Docker
+docker-compose*.yml
+Dockerfile*
+
+# Documentation
+docs/
+README.md
+LICENSE
+
+# CI/CD
+.github
+.pre-commit-config.yaml
+
+# Environment files
+.env
+.envrc
+.env.*
+
+# Node (if any tooling uses it)
+node_modules
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Beans task tracker
+.beans/
