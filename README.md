@@ -206,8 +206,8 @@ curl -X POST http://localhost:8081/api/v1/nfe/ingest \
       {
         "item_number": 1,
         "description": "Aparas de PET",
-        "ncm": "39159000",
-        "gross_weight": "1500.000"
+        "ncm_code": "39159000",
+        "gross_weight_kg": "1500.000"
       }
     ]
   }'
