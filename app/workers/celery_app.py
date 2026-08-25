@@ -1,8 +1,11 @@
 from celery import Celery
+from kombu import Exchange, Queue
 
 from app.core.config import get_settings
 
 settings = get_settings()
+
+NFE_EXCHANGE = Exchange("ecotrace.events", type="topic", durable=True)
 
 celery_app = Celery(
     "ecotrace_engine",
@@ -19,6 +22,8 @@ celery_app.conf.update(
     task_track_started=True,
     task_acks_late=True,
     worker_prefetch_multiplier=1,
+    include=["app.workers.tasks.audit_tasks"],
+    task_queues=(Queue("ecotrace.invoices", NFE_EXCHANGE, routing_key="nfe.received"),),
     task_routes={
         "app.workers.tasks.audit_tasks.process_invoice_event": {
             "queue": "ecotrace.invoices",

@@ -5,11 +5,9 @@ import structlog
 from redis.asyncio import Redis
 
 from app.core.config import get_settings
-from app.domain.aggregates.invoice import Invoice, InvoiceStatus
+from app.domain.aggregates.invoice import InvoiceStatus
 from app.domain.services.fraud_detector import FraudDetectorService
 from app.domain.services.ncm_parser import NCMParserService
-from app.domain.value_objects.access_key import AccessKey
-from app.domain.value_objects.cnpj import CNPJ
 from app.infrastructure.cache.redis_lock import RedisLockManager
 from app.infrastructure.database.repositories.credit_repository_impl import (
     CreditRepositoryImpl,
@@ -48,42 +46,38 @@ async def _handle(task: Any, payload: dict[str, Any]) -> dict[str, str]:
             raise task.retry(countdown=60)
 
         try:
-            return await _process_invoice(payload, hash_sha256, logger)
+            return await _process_invoice(hash_sha256, logger)
         finally:
             await lock_manager.release(lock_key)
     finally:
         await redis.aclose()
 
 
-async def _process_invoice(
-    payload: dict[str, Any], hash_sha256: str, logger: Any
-) -> dict[str, str]:
+async def _process_invoice(hash_sha256: str, logger: Any) -> dict[str, str]:
     session_factory = get_async_session_factory()
     async with session_factory() as session:
         invoice_repo = InvoiceRepositoryImpl(session)
-        existing = await invoice_repo.find_by_hash(hash_sha256)
+        invoice = await invoice_repo.find_by_hash(hash_sha256)
 
         fraud_detector = FraudDetectorService()
-        if existing is not None:
+        if invoice is not None:
             try:
-                fraud_detector.verify_duplication(existing, existing)
+                fraud_detector.verify_duplication(invoice, invoice)
             except Exception:
-                existing.status = InvoiceStatus.FRAUD_SUSPECT
-                existing.rejection_reason = f"Double use detected: hash {hash_sha256}"
-                await invoice_repo.save(existing)
+                invoice.status = InvoiceStatus.FRAUD_SUSPECT
+                invoice.rejection_reason = f"Double use detected: hash {hash_sha256}"
+                await invoice_repo.save(invoice)
                 await session.commit()
-                logger.warning("fraud_detected", invoice_id=str(existing.id), hash=hash_sha256)
-                return {"status": "FRAUD_SUSPECT", "invoice_id": str(existing.id)}
+                logger.warning("fraud_detected", invoice_id=str(invoice.id), hash=hash_sha256)
+                return {"status": "FRAUD_SUSPECT", "invoice_id": str(invoice.id)}
 
-        invoice = Invoice(
-            access_key=AccessKey(payload["access_key"]),
-            issuer_cnpj=CNPJ(payload["issuer_cnpj"]),
-            recipient_cnpj=CNPJ(payload["recipient_cnpj"]),
-            status=InvoiceStatus.PROCESSING,
-        )
-        invoice.tracking_id = payload["tracking_id"]
+        if invoice is None:
+            logger.warning("invoice_not_found", hash=hash_sha256)
+            return {"status": "NOT_FOUND", "invoice_id": ""}
 
-        sefaz_response = await MockSEFAZClient().consult(payload["access_key"])
+        invoice.status = InvoiceStatus.PROCESSING
+
+        sefaz_response = await MockSEFAZClient().consult(invoice.access_key.value)
 
         if not sefaz_response.authorized:
             invoice.status = InvoiceStatus.REJECTED

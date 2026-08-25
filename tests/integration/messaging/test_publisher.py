@@ -1,4 +1,5 @@
 import asyncio
+import json
 
 import aio_pika
 import pytest
@@ -30,7 +31,7 @@ def test_publishes_persistent_message_to_topic_exchange() -> None:
 
         payload = b'{"tracking_id": "abc-123"}'
 
-        async def scenario() -> tuple[bytes, str | None, str | None]:
+        async def scenario() -> tuple[bytes, str | None, str | None, dict]:
             broker_connection = await aio_pika.connect_robust(url)
             try:
                 channel = await broker_connection.channel()
@@ -49,13 +50,20 @@ def test_publishes_persistent_message_to_topic_exchange() -> None:
                     if hasattr(message.delivery_mode, "value")
                     else message.delivery_mode
                 )
-                return message.body, str(delivery_mode), message.content_type
+                return (
+                    message.body,
+                    str(delivery_mode),
+                    message.content_type,
+                    dict(message.headers or {}),
+                )
             finally:
                 await broker_connection.close()
 
-        body, delivery_mode, content_type = asyncio.run(scenario())
-        assert body == payload
+        body, delivery_mode, content_type, headers = asyncio.run(scenario())
+        parsed = json.loads(body.decode("utf-8"))
+        assert parsed[0] == [{"tracking_id": "abc-123"}]
         assert delivery_mode == "2"
         assert content_type == "application/json"
+        assert headers.get("task") == "app.workers.tasks.audit_tasks.process_invoice_event"
 
         asyncio.run(connection.close())
