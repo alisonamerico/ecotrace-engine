@@ -1,6 +1,9 @@
+import asyncio
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
+from alembic import command as alembic_command
+from alembic.config import Config as AlembicConfig
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
@@ -14,6 +17,13 @@ from app.infrastructure.messaging.publisher import RabbitMQEventPublisher
 from app.infrastructure.messaging.rabbitmq import RabbitMQConnection
 
 
+def _run_alembic_upgrade() -> None:
+    """Run Alembic upgrade synchronously (called via asyncio.to_thread)."""
+    alembic_cfg = AlembicConfig("migrations/alembic.ini")
+    alembic_cfg.set_main_option("script_location", "migrations")
+    alembic_command.upgrade(alembic_cfg, "head")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """Wire shared infrastructure lazily; close it on shutdown."""
@@ -22,6 +32,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     configure_telemetry()
     logger = get_logger()
     logger.info("app_startup", environment=settings.ENVIRONMENT, version=settings.APP_VERSION)
+
+    await asyncio.to_thread(_run_alembic_upgrade)
+    logger.info("database_migrated")
 
     connection = RabbitMQConnection()
     app.state.message_publisher = RabbitMQEventPublisher(connection)

@@ -20,6 +20,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project
 
 COPY app/ ./app/
+COPY migrations/ ./migrations/
 
 RUN uv sync --frozen
 
