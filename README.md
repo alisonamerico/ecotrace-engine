@@ -148,6 +148,9 @@ ecotrace-engine/
 # Instalar dependências
 uv sync
 
+# Criar arquivo de ambiente (ajuste credenciais conforme necessário)
+cp .env.example .env
+
 # Subar infraestrutura local
 docker compose -f docker/docker-compose.yml up -d
 
