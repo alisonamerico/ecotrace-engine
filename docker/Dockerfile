@@ -3,7 +3,8 @@ FROM python:3.13-slim
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     UV_COMPILE_BYTECODE=1 \
-    UV_LINK_MODE=copy
+    UV_LINK_MODE=copy \
+    PORT=8081
 
 WORKDIR /app
 
@@ -22,6 +23,6 @@ COPY app/ ./app/
 
 RUN uv sync --frozen
 
-EXPOSE 8000
+EXPOSE ${PORT}
 
-CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uv run uvicorn app.main:app --host 0.0.0.0 --port ${PORT}"]

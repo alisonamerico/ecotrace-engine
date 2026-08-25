@@ -158,11 +158,30 @@ docker compose -f docker/docker-compose.yml up -d
 uv run alembic -c migrations/alembic.ini upgrade head
 
 # Iniciar API
-uv run uvicorn app.main:app --reload
+uv run uvicorn app.main:app --reload --port 8081
 
 # Iniciar worker
 uv run celery -A app.workers.celery_app:celery_app worker -l info -Q ecotrace.invoices
 ```
+
+### Setup Docker (tudo junto)
+
+```bash
+# Criar arquivo de ambiente
+cp .env.example .env
+
+# Subar tudo (infra + API + worker)
+docker compose -f docker/docker-compose.yml up --build -d
+
+# Ver logs
+docker compose -f docker/docker-compose.yml logs -f api worker
+
+# Parar tudo
+docker compose -f docker/docker-compose.yml down
+```
+
+> Em modo Docker, a API fica disponível em `http://localhost:8081`
+> Os hostnames de infraestrutura são automaticamente configurados para os nomes Docker (`postgres`, `redis`, `rabbitmq`).
 
 ### Endpoints
 
