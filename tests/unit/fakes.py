@@ -50,7 +50,5 @@ class RecordingBroker(MessageBroker):
     def __init__(self) -> None:
         self.published: list[tuple[str, str, bytes]] = []
 
-    async def publish(
-        self, exchange: str, routing_key: str, payload: bytes
-    ) -> None:
+    async def publish(self, exchange: str, routing_key: str, payload: bytes) -> None:
         self.published.append((exchange, routing_key, payload))

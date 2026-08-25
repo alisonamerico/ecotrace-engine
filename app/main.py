@@ -42,14 +42,13 @@ def create_app() -> FastAPI:
 
     try:
         from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor  # noqa: PLC0415
+
         FastAPIInstrumentor.instrument_app(application)
     except Exception:
         pass
 
     @application.exception_handler(DomainException)
-    async def domain_exception_handler(
-        request: Request, exc: DomainException
-    ) -> JSONResponse:
+    async def domain_exception_handler(request: Request, exc: DomainException) -> JSONResponse:
         """Map pure-domain validation failures to HTTP 422 responses."""
         del request
         return JSONResponse(status_code=422, content={"detail": exc.message})

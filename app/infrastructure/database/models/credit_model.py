@@ -56,6 +56,4 @@ class CreditModel(Base):
 
     invoice: Mapped["InvoiceModel"] = relationship(back_populates="credits")
 
-    __table_args__ = (
-        Index("idx_recycling_credits_material_status", "material_family", "status"),
-    )
+    __table_args__ = (Index("idx_recycling_credits_material_status", "material_family", "status"),)

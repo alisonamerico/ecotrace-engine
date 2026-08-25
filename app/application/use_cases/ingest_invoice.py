@@ -61,9 +61,7 @@ class IngestInvoice:
             )
         return invoice
 
-    def _guard_against_duplication(
-        self, existing: Invoice | None, incoming: Invoice
-    ) -> None:
+    def _guard_against_duplication(self, existing: Invoice | None, incoming: Invoice) -> None:
         try:
             is_duplicate = self._fraud_detector.verify_duplication(existing, incoming)
         except FraudDetectedException as exc:

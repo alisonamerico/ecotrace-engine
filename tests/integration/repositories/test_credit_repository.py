@@ -36,9 +36,7 @@ async def test_find_by_id_returns_none_when_missing(db_session) -> None:
     assert await repository.find_by_id(uuid4()) is None
 
 
-async def test_find_by_invoice_id_returns_credits(
-    db_session, make_invoice, make_credit
-) -> None:
+async def test_find_by_invoice_id_returns_credits(db_session, make_invoice, make_credit) -> None:
     invoice_a = make_invoice()
     invoice_b = make_invoice()
     invoice_repository = InvoiceRepositoryImpl(db_session)

@@ -10,15 +10,11 @@ class RabbitMQEventPublisher(MessageBroker):
     def __init__(self, connection: RabbitMQConnection) -> None:
         self._connection = connection
 
-    async def publish(
-        self, exchange: str, routing_key: str, payload: bytes
-    ) -> None:
+    async def publish(self, exchange: str, routing_key: str, payload: bytes) -> None:
         """Declare the durable topic exchange if needed and publish persistently."""
         connection = await self._connection.connect()
         channel = await connection.channel()
-        topic_exchange = await channel.declare_exchange(
-            exchange, ExchangeType.TOPIC, durable=True
-        )
+        topic_exchange = await channel.declare_exchange(exchange, ExchangeType.TOPIC, durable=True)
 
         message = Message(
             body=payload,

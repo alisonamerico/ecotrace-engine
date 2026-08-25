@@ -37,14 +37,10 @@ def test_publishes_persistent_message_to_topic_exchange() -> None:
                 exchange = await channel.declare_exchange(
                     NFE_EXCHANGE, aio_pika.ExchangeType.TOPIC, durable=True
                 )
-                queue = await channel.declare_queue(
-                    "publisher-test-queue", exclusive=True
-                )
+                queue = await channel.declare_queue("publisher-test-queue", exclusive=True)
                 await queue.bind(exchange, routing_key=NFE_RECEIVED_ROUTING_KEY)
 
-                await publisher.publish(
-                    NFE_EXCHANGE, NFE_RECEIVED_ROUTING_KEY, payload
-                )
+                await publisher.publish(NFE_EXCHANGE, NFE_RECEIVED_ROUTING_KEY, payload)
 
                 message = await queue.get(timeout=10, fail=False)
                 assert message is not None, "no message arrived at the queue"

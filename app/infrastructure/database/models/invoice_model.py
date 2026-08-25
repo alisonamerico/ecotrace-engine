@@ -26,9 +26,7 @@ class InvoiceModel(Base):
         default=uuid.uuid4,
         server_default=text("uuid_generate_v4()"),
     )
-    tracking_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), unique=True, nullable=False
-    )
+    tracking_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), unique=True, nullable=False)
     access_key: Mapped[str] = mapped_column(String(44), nullable=False)
     hash_sha256: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     issuer_cnpj: Mapped[str] = mapped_column(String(14), nullable=False)

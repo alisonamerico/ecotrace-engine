@@ -20,6 +20,4 @@ async def get_invoice_status(
     try:
         return await use_case.execute(tracking_id)
     except InvoiceNotFoundError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail=exc.message
-        ) from exc
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=exc.message) from exc

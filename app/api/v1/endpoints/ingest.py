@@ -23,6 +23,4 @@ async def ingest_invoice(
     try:
         return await use_case.execute(request)
     except DuplicateInvoiceError as exc:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT, detail=exc.message
-        ) from exc
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=exc.message) from exc

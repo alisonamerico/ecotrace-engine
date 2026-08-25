@@ -52,9 +52,9 @@ class Settings(BaseSettings):
     REDIS_PORT: int = 6379
     REDIS_DB: int = 0
     REDIS_PASSWORD: SecretStr | None = Field(
-        default_factory=lambda: _credential("REDIS_PASSWORD")
-        if config("REDIS_PASSWORD", default="")
-        else None
+        default_factory=lambda: (
+            _credential("REDIS_PASSWORD") if config("REDIS_PASSWORD", default="") else None
+        )
     )
     REDIS_URL: str | None = None
 

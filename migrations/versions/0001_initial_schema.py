@@ -4,6 +4,7 @@ Revision ID: 0001
 Revises:
 Create Date: 2026-08-22
 """
+
 from collections.abc import Sequence
 
 import sqlalchemy as sa
@@ -63,9 +64,7 @@ def upgrade() -> None:
         sa.UniqueConstraint("tracking_id"),
         sa.UniqueConstraint("hash_sha256"),
         sa.CheckConstraint("char_length(access_key) = 44", name="chk_access_key_length"),
-        sa.CheckConstraint(
-            "char_length(hash_sha256) = 64", name="chk_hash_sha256_length"
-        ),
+        sa.CheckConstraint("char_length(hash_sha256) = 64", name="chk_hash_sha256_length"),
     )
     op.create_index(
         "idx_invoices_hash_sha256",
@@ -74,9 +73,7 @@ def upgrade() -> None:
         unique=False,
         postgresql_using="hash",
     )
-    op.create_index(
-        "idx_invoices_tracking_id", "invoices", ["tracking_id"], unique=False
-    )
+    op.create_index("idx_invoices_tracking_id", "invoices", ["tracking_id"], unique=False)
     op.create_index(
         "idx_invoices_status_created_at",
         "invoices",
@@ -103,9 +100,7 @@ def upgrade() -> None:
             server_default=sa.text("0.000"),
             nullable=False,
         ),
-        sa.Column(
-            "is_eligible", sa.Boolean(), server_default=sa.text("false"), nullable=False
-        ),
+        sa.Column("is_eligible", sa.Boolean(), server_default=sa.text("false"), nullable=False),
         sa.Column(
             "created_at",
             sa.DateTime(timezone=True),
@@ -115,9 +110,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["invoice_id"], ["invoices.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(
-        "idx_invoice_items_invoice_id", "invoice_items", ["invoice_id"], unique=False
-    )
+    op.create_index("idx_invoice_items_invoice_id", "invoice_items", ["invoice_id"], unique=False)
 
     op.create_table(
         "recycling_credits",
@@ -163,9 +156,7 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_index(
-        "idx_recycling_credits_material_status", table_name="recycling_credits"
-    )
+    op.drop_index("idx_recycling_credits_material_status", table_name="recycling_credits")
     op.drop_table("recycling_credits")
     op.drop_index("idx_invoice_items_invoice_id", table_name="invoice_items")
     op.drop_table("invoice_items")

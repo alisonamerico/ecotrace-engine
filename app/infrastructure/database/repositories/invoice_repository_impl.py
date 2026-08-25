@@ -40,14 +40,8 @@ class InvoiceRepositoryImpl(InvoiceRepositoryInterface):
     async def find_by_access_key(self, access_key: str) -> Invoice | None:
         return await self._find_one(InvoiceModel.access_key == access_key)
 
-    async def _find_one(
-        self, *criteria: ColumnExpressionArgument[bool]
-    ) -> Invoice | None:
-        statement = (
-            select(InvoiceModel)
-            .where(*criteria)
-            .options(selectinload(InvoiceModel.items))
-        )
+    async def _find_one(self, *criteria: ColumnExpressionArgument[bool]) -> Invoice | None:
+        statement = select(InvoiceModel).where(*criteria).options(selectinload(InvoiceModel.items))
         result = await self._session.execute(statement)
         model = result.scalar_one_or_none()
         if model is None:
@@ -65,6 +59,4 @@ class InvoiceRepositoryImpl(InvoiceRepositoryInterface):
         model.sefaz_status = entity.sefaz_status
         model.rejection_reason = entity.rejection_reason
         model.updated_at = entity.updated_at
-        model.items = [
-            InvoiceMapper.to_item_model(item, entity.id) for item in entity.items
-        ]
+        model.items = [InvoiceMapper.to_item_model(item, entity.id) for item in entity.items]

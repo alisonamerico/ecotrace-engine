@@ -14,9 +14,7 @@ from app.infrastructure.database.repositories.invoice_repository_impl import (
 pytestmark = pytest.mark.integration
 
 
-async def test_save_new_invoice_persists_aggregate_and_items(
-    db_session, make_invoice
-) -> None:
+async def test_save_new_invoice_persists_aggregate_and_items(db_session, make_invoice) -> None:
     invoice = make_invoice()
     repository = InvoiceRepositoryImpl(db_session)
 
@@ -40,9 +38,7 @@ async def test_find_by_id_returns_none_when_missing(db_session) -> None:
     assert await repository.find_by_id(uuid4()) is None
 
 
-async def test_find_by_tracking_id_hash_and_access_key(
-    db_session, make_invoice
-) -> None:
+async def test_find_by_tracking_id_hash_and_access_key(db_session, make_invoice) -> None:
     invoice = make_invoice()
     repository = InvoiceRepositoryImpl(db_session)
     await repository.save(invoice)
@@ -57,9 +53,7 @@ async def test_find_by_tracking_id_hash_and_access_key(
     assert by_key is not None and by_key.id == invoice.id
 
 
-async def test_update_persists_status_transition_and_new_items(
-    db_session, make_invoice
-) -> None:
+async def test_update_persists_status_transition_and_new_items(db_session, make_invoice) -> None:
     invoice = make_invoice()
     repository = InvoiceRepositoryImpl(db_session)
 

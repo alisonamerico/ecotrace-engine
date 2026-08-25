@@ -37,9 +37,7 @@ class CreditRepositoryImpl(CreditRepositoryInterface):
     async def find_by_credit_code(self, credit_code: str) -> RecyclingCredit | None:
         return await self._find_one(CreditModel.credit_code == credit_code)
 
-    async def _find_one(
-        self, *criteria: ColumnExpressionArgument[bool]
-    ) -> RecyclingCredit | None:
+    async def _find_one(self, *criteria: ColumnExpressionArgument[bool]) -> RecyclingCredit | None:
         result = await self._session.execute(select(CreditModel).where(*criteria))
         model = result.scalar_one_or_none()
         if model is None:

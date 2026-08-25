@@ -34,9 +34,7 @@ def _payload(access_key: str = "35240112345678000190550010000001230000000001") -
 async def make_client() -> AsyncIterator[
     Callable[[FakeInvoiceRepository, RecordingBroker], AsyncClient]
 ]:
-    def _make(
-        repository: FakeInvoiceRepository, broker: RecordingBroker
-    ) -> AsyncClient:
+    def _make(repository: FakeInvoiceRepository, broker: RecordingBroker) -> AsyncClient:
         use_case = IngestInvoice(repository=repository, broker=broker)
         app.dependency_overrides[get_ingest_use_case] = lambda: use_case
         transport = ASGITransport(app=app)
