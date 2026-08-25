@@ -55,7 +55,9 @@ async def _handle(task: Any, payload: dict[str, Any]) -> dict[str, str]:
         await redis.aclose()
 
 
-async def _process_invoice(payload: dict[str, Any], hash_sha256: str, logger: Any) -> dict[str, str]:
+async def _process_invoice(
+    payload: dict[str, Any], hash_sha256: str, logger: Any
+) -> dict[str, str]:
     session_factory = get_async_session_factory()
     async with session_factory() as session:
         invoice_repo = InvoiceRepositoryImpl(session)
