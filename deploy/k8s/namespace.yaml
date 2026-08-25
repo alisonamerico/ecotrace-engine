@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ecotrace
+  labels:
+    app.kubernetes.io/part-of: ecotrace-engine
+    app.kubernetes.io/managed-by: kubectl

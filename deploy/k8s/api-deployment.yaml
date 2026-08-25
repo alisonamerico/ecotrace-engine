@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecotrace-api
+  namespace: ecotrace
+  labels:
+    app.kubernetes.io/name: ecotrace-api
+    app.kubernetes.io/part-of: ecotrace-engine
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ecotrace-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ecotrace-api
+        app.kubernetes.io/part-of: ecotrace-engine
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/ecotrace/ecotrace-engine:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: ecotrace-config
+            - secretRef:
+                name: ecotrace-secrets
+          livenessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "512Mi"

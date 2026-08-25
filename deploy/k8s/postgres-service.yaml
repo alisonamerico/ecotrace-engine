@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecotrace-postgres
+  namespace: ecotrace
+  labels:
+    app.kubernetes.io/name: ecotrace-postgres
+    app.kubernetes.io/part-of: ecotrace-engine
+spec:
+  selector:
+    app.kubernetes.io/name: ecotrace-postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
+  type: ClusterIP

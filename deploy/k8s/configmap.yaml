@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ecotrace-config
+  namespace: ecotrace
+  labels:
+    app.kubernetes.io/part-of: ecotrace-engine
+data:
+  ENVIRONMENT: "production"
+  DEBUG: "false"
+  POSTGRES_SERVER: "ecotrace-postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "ecotrace_db"
+  REDIS_HOST: "ecotrace-redis"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  RABBITMQ_HOST: "ecotrace-rabbitmq"
+  RABBITMQ_PORT: "5672"
+  CELERY_BROKER_URL: "amqp://ecotrace-rabbitmq:5672//"
+  CELERY_RESULT_BACKEND: "redis://ecotrace-redis:6379/1"
+  OTEL_SERVICE_NAME: "ecotrace-engine"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://otel-collector:4317"
+  LOG_LEVEL: "INFO"
+  LOG_FORMAT: "json"
+  SEFAZ_MOCK_ENABLED: "true"
+  API_V1_STR: "/api/v1"
+  APP_NAME: "EcoTrace Engine"
+  APP_VERSION: "0.1.0"
