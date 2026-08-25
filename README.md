@@ -152,7 +152,7 @@ uv sync
 docker compose -f docker/docker-compose.yml up -d
 
 # Rodar migrações
-uv run alembic upgrade head
+uv run alembic -c migrations/alembic.ini upgrade head
 
 # Iniciar API
 uv run uvicorn app.main:app --reload --port 8000
