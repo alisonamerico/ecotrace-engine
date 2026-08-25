@@ -44,6 +44,33 @@
 
 Motor distribuído de ingestão e conciliação antifraude de Notas Fiscais para o ecossistema Eureciclo.
 
+## O Problema
+
+No Brasil, a **Política Nacional de Resíduos Sólidos** (Lei nº 12.305/2010) obriga empresas a comprovarem a reciclagem de ao menos 22% do equivalente em massa das embalagens que colocam no mercado. Em vez de recolher suas próprias embalagens, as marcas adquirem **Certificados de Reciclagem** lastreados nas Notas Fiscais Eletrônicas (NF-e) de venda de materiais recicláveis por cooperativas e operadores de logística reversa.
+
+Esse modelo gera quatro problemas críticos:
+
+| Problema | Impacto |
+|---|---|
+| **Fraude por Dupla Contagem** | A mesma NF-e é reutilizada em diferentes plataformas ou lotes para gerar múltiplos certificados, inflacionando falsamente a meta de reciclagem e prejudicando a confiabilidade do sistema. |
+| **Parsing e Validação Fiscal em Lote** | Cooperativas enviam volumes massivos de XMLs com NCMs (Nomenclatura Comum do Mercosul) heterogêneos, exigindo validação automática e Filtering de materiais elegíveis. |
+| **Instabilidade da SEFAZ** | A consulta à Secretaria da Fazenda para autorização de NF-e apresenta latência variável e indisponibilidades pontuais, demandando um pipeline assíncrono tolerante a falhas. |
+| **Rastreabilidade e Cadeia de Custódia** | É necessário garantir que a massa reciclada declarada pertence ao material, NCM e estado corretos, com trilha de auditoria completa e imutável. |
+
+## A Solução
+
+O **EcoTrace Engine** resolve esses problemas com um pipeline distribuído assíncrono de alta performance:
+
+1. **Ingestão instantânea** — Recebe NF-e via HTTP e responde imediatamente com `202 Accepted` + `tracking_id`, desacoplando recebimento do processamento pesado.
+2. **Motor Antifraude** — Gera hash SHA-256 de cada NF-e e bloqueia reprocessamento via lock distribuído Redis (`SET NX EX`), sinalizando qualquer tentativa de dupla contagem como `FRAUD_SUSPECT`.
+3. **Validação Automática** — Filtra NCMs elegíveis, calcula massa reciclável por família de material e valida contra a SEFAZ (simulada com retries, backoff exponencial e circuit breaker).
+4. **Geração de Créditos** — Converte massa aprovada em `RecyclingCredit` auditáveis, com trilha completa de cada etapa do pipeline.
+5. **Observabilidade Total** — Logs JSON estruturados (structlog), tracing distribuído (OpenTelemetry) e métricas em tempo real (Prometheus/Grafana).
+
+### Por que isso importa
+
+Um sistema antifraude confiável garante que os Certificados de Reciclogem reflitam reciclagem real, protegendo a integridade de todo o ecossistema de logística reversa brasileiro e fortalecendo a confiança entre cooperativas, marcas e reguladores.
+
 ## Visão Geral
 
 O EcoTrace Engine valida NF-e em tempo real, detecta fraude por dupla contagem e gera Recycling Credits auditáveis — tudo via pipeline assíncrono de alta performance.
