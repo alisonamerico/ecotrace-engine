@@ -1,5 +1,6 @@
 import json
 import uuid
+from typing import Any
 
 from aio_pika import DeliveryMode, ExchangeType, Message
 
@@ -30,7 +31,7 @@ class RabbitMQEventPublisher(MessageBroker):
             [[event_dict], {}, {"callbacks": None, "errbacks": None, "chain": None, "chord": None}]
         )
 
-        headers = {
+        headers: dict[str, Any] = {
             "lang": "py",
             "task": DEFAULT_TASK_NAME,
             "id": task_id,
