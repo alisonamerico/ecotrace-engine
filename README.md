@@ -37,7 +37,10 @@
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License">
   </a>
-  <a href="https://github.com/alison/americo/ecotrace-engine/actions">
+  <a href="https://github.com/alisonamerico/ecotrace-engine/actions">
+    <img src="https://github.com/alisonamerico/ecotrace-engine/actions/workflows/ci-cd.yml/badge.svg" alt="CI/CD">
+  </a>
+  <a href="https://github.com/alisonamerico/ecotrace-engine/actions">
     <img src="https://img.shields.io/badge/tests-117%20passing-brightgreen.svg" alt="Tests">
   </a>
 </p>
