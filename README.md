@@ -151,7 +151,7 @@ uv sync
 # Criar arquivo de ambiente (ajuste credenciais conforme necessário)
 cp .env.example .env
 
-# Subar infraestrutura local
+# Subar infraestrutura local (portas configuráveis via .env)
 docker compose -f docker/docker-compose.yml up -d
 
 # Rodar migrações

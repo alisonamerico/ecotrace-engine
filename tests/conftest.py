@@ -9,6 +9,7 @@ from app.core.config import Settings, get_settings
 def test_settings() -> Settings:
     """Fixture providing isolated test settings."""
     return Settings(
+        _env_file=None,
         ENVIRONMENT="test",
         DEBUG=True,
         POSTGRES_SERVER="localhost",
@@ -27,6 +28,8 @@ def test_settings() -> Settings:
         RABBITMQ_USER="test_rabbit",
         RABBITMQ_PASSWORD="test_rabbit_pass",
         RABBITMQ_URL=None,
+        CELERY_BROKER_URL=None,
+        CELERY_RESULT_BACKEND=None,
     )
 
 

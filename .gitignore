@@ -219,3 +219,4 @@ __marimo__/
 
 # Project brief / interview context (private)
 docs/projeto-backend-python-senior-para-entrevista-tecnica-eureciclo.md
+docker/.env

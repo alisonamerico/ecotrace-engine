@@ -26,7 +26,7 @@ def test_async_database_url_computed(test_settings: Settings) -> None:
 
 def test_explicit_database_url() -> None:
     custom_url = "postgresql+asyncpg://custom:custom@remote:5433/custom_db"
-    settings = Settings(DATABASE_URL=custom_url)
+    settings = Settings(_env_file=None, DATABASE_URL=custom_url)
     assert settings.async_database_url == custom_url
 
 
@@ -35,13 +35,18 @@ def test_redis_connection_url_without_password(test_settings: Settings) -> None:
 
 
 def test_redis_connection_url_with_password() -> None:
-    settings = Settings(REDIS_PASSWORD="secret_redis_pass", REDIS_DB=2)
+    settings = Settings(
+        _env_file=None,
+        REDIS_PASSWORD="secret_redis_pass",
+        REDIS_PORT=6379,
+        REDIS_DB=2,
+    )
     assert settings.redis_connection_url == "redis://:secret_redis_pass@localhost:6379/2"
 
 
 def test_explicit_redis_url() -> None:
     custom_url = "redis://custom-host:6380/3"
-    settings = Settings(REDIS_URL=custom_url)
+    settings = Settings(_env_file=None, REDIS_URL=custom_url)
     assert settings.redis_connection_url == custom_url
 
 
@@ -62,14 +67,19 @@ def test_celery_defaults(test_settings: Settings) -> None:
 
 
 def test_celery_backend_with_password() -> None:
-    settings = Settings(REDIS_PASSWORD="redis_secret")
+    settings = Settings(
+        _env_file=None,
+        REDIS_PASSWORD="redis_secret",
+        REDIS_PORT=6379,
+        REDIS_HOST="localhost",
+    )
     assert settings.celery_backend == "redis://:redis_secret@localhost:6379/1"
 
 
 def test_explicit_celery_urls() -> None:
     broker = "amqp://custom:custom@broker:5672//"
     backend = "redis://custom:6379/5"
-    settings = Settings(CELERY_BROKER_URL=broker, CELERY_RESULT_BACKEND=backend)
+    settings = Settings(_env_file=None, CELERY_BROKER_URL=broker, CELERY_RESULT_BACKEND=backend)
     assert settings.celery_broker == broker
     assert settings.celery_backend == backend
 
@@ -95,6 +105,7 @@ def test_credentials_are_secretstr_and_not_leaked_in_repr(test_settings: Setting
 def test_deployed_environment_requires_credentials() -> None:
     with pytest.raises(ValidationError) as exc_info:
         Settings(
+            _env_file=None,
             ENVIRONMENT="production",
             POSTGRES_USER="",
             POSTGRES_PASSWORD="",
@@ -109,6 +120,7 @@ def test_deployed_environment_requires_credentials() -> None:
 
 def test_development_allows_empty_credentials() -> None:
     settings = Settings(
+        _env_file=None,
         ENVIRONMENT="development",
         POSTGRES_USER="",
         POSTGRES_PASSWORD="",
