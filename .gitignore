@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project brief / interview context (private)
+docs/projeto-backend-python-senior-para-entrevista-tecnica-eureciclo.md
