@@ -1,12 +1,14 @@
 # FASE 00 — Descoberta do Problema (Product Discovery)
 
 ## 1. Visão Geral
-Este documento registra a análise do modelo de negócios da **Eureciclo** e justifica a escolha do projeto **EcoTrace Engine** para ser demonstrado como caso prático de arquitetura e engenharia backend sênior.
+Este documento registra a análise do modelo de negócios da **Eureciclo** e justifica a escolha do projeto **EcoTrace Engine** para ser demonstrado como caso prático de arquitetura
+e engenharia backend sênior.
 
 ## 2. O Modelo de Negócios da Eureciclo
 A Eureciclo atua na logística reversa de embalagens pós-consumo conforme a Política Nacional de Resíduos Sólidos (PNRS - Lei nº 12.305/2010). 
 - **Obrigatoriedade:** Empresas devem comprovar a reciclagem de ao menos 22% do equivalente em massa das embalagens enviadas ao mercado.
-- **Funcionamento:** Em vez de recolher suas próprias embalagens, as marcas adquirem **Certificados de Reciclagem** lastreados nas Notas Fiscais Eletrônicas (NF-e) de venda de materiais recicláveis por cooperativas e operadores.
+- **Funcionamento:** Em vez de recolher suas próprias embalagens, as marcas adquirem **Certificados de Reciclagem** lastreados nas 
+Notas Fiscais Eletrônicas (NF-e) de venda de materiais recicláveis por cooperativas e operadores.
 
 ## 3. Principais Desafios Tecnológicos do Domínio
 1. **Fraude por Dupla Contagem (Double Spending):** Reutilização da mesma NF-e em diferentes plataformas ou lotes.
@@ -25,4 +27,5 @@ A Eureciclo atua na logística reversa de embalagens pós-consumo conforme a Pol
 | **Pontuação Final** | **9.95 / 10 (VENCEDOR)** | **8.95 / 10** | **7.90 / 10** |
 
 ## 5. Projeto Selecionado: EcoTrace Engine
-Um motor distribuído de alta performance para ingestão assíncrona de NF-es, validação de regras de NCM, consulta resiliente à SEFAZ, detecção de fraude por dupla contagem via SHA-256 e geração de Créditos de Reciclagem auditáveis.
+Um motor distribuído de alta performance para ingestão assíncrona de NF-es, validação de regras de NCM, consulta resiliente à SEFAZ, 
+detecção de fraude por dupla contagem via SHA-256 e geração de Créditos de Reciclagem auditáveis.

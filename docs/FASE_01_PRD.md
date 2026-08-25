@@ -2,7 +2,8 @@
 
 ## 1. Produto
 - **Nome:** EcoTrace Engine
-- **Elevator Pitch:** Motor distribuído assíncrono para ingestão, validação fiscal e auditoria antifraude de NF-es de reciclagem, garantindo unicidade de massa e emissão de certificados confiáveis.
+- **Elevator Pitch:** Motor distribuído assíncrono para ingestão, validação fiscal e auditoria antifraude de NF-es de reciclagem, 
+garantindo unicidade de massa e emissão de certificados confiáveis.
 
 ## 2. Personas & Stakeholders
 - **Operador de Cooperativa:** Realiza envio massivo de NF-es e precisa de respostas rápidas sobre o status do processamento.
